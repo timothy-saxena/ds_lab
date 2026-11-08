@@ -5,7 +5,7 @@ library(caret)
 data <- iris
 head(data)
 
-# 2. Split into 70% training and 30% testing
+# 2. Split into 70% training and #30% testing
 set.seed(23)
 
 train_index <- sample(
