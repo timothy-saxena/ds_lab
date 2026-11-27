@@ -1,0 +1,22 @@
+# Question 3: Patient vectors in different ways and two-matrix operations.
+patient_id <- c(101, 102, 103, 104, 105)
+age <- seq(25, 65, by = 10)
+diabetes <- c(FALSE, TRUE, FALSE, FALSE, TRUE)
+patient_group <- rep(c("Control", "Case"), length.out = 5)
+patients <- data.frame(patient_id, age, diabetes, patient_group)
+print(patients)
+
+A <- matrix(c(4, 1, 2, 3), nrow = 2, byrow = TRUE)
+B <- matrix(c(2, 0, 1, 2), nrow = 2, byrow = TRUE)
+cat("A + B:\n"); print(A + B)
+cat("A - B:\n"); print(A - B)
+cat("Element-wise multiplication A * B:\n"); print(A * B)
+cat("Matrix multiplication A %*% B:\n"); print(A %*% B)
+cat("Diagonal of A:\n"); print(diag(A))
+cat("Transpose of A:\n"); print(t(A))
+cat("Inverse of A:\n"); print(solve(A))
+
+A_with_row <- rbind(A, c(5, 6))
+A_with_row_and_column <- cbind(A_with_row, c(7, 8, 9))
+cat("After adding a row and column:\n"); print(A_with_row_and_column)
+cat("Subset: rows 1-2, column 2:\n"); print(A[1:2, 2, drop = FALSE])
