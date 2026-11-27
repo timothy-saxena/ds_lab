@@ -1,5 +1,6 @@
 
 # Correlation, Covariance and ANOVA
+install.packages("corrplot")
 
 # Load dataset
 data(iris)
@@ -18,7 +19,6 @@ print("Covariance Matrix")
 print(cov_matrix)
 
 # 3. Correlation plot
-install.packages("corrplot")
 library(corrplot)
 
 corrplot(cor_matrix,
