@@ -810,3 +810,97 @@ plot(prob, pch = 19, col = "blue",
      ylim = c(0, 1))
 
 abline(h = 0.5, col = "red")
+
+================================================================================
+# Correlation, Covariance and ANOVA
+================================================================================
+
+# Load dataset
+data(iris)
+
+# Select numerical variables
+numeric_data <- iris[, 1:4]
+
+# 1. Correlation matrix
+cor_matrix <- cor(numeric_data)
+print("Correlation Matrix")
+print(cor_matrix)
+
+# 2. Covariance matrix
+cov_matrix <- cov(numeric_data)
+print("Covariance Matrix")
+print(cov_matrix)
+
+# 3. Correlation plot
+library(corrplot)
+
+corrplot(cor_matrix,
+         method="color",
+         type="upper",
+         addCoef.col="black",
+         main="Iris Correlation Plot")
+
+# 4. ANOVA
+model <- aov(Sepal.Length ~ Species,
+             data=iris)
+
+print("ANOVA Results")
+summary(model)
+
+# 5. Tukey test
+TukeyHSD(model)
+
+# 6. Box plot
+boxplot(Sepal.Length ~ Species,
+        data=iris,
+        main="Sepal Length by Species",
+        col=c("red", "green", "blue"))
+
+
+
+================================================================================
+# Web Scraping in R
+================================================================================
+
+# Install and load package
+install.packages("rvest")
+library(rvest)
+
+# Read webpage
+url <- "https://en.wikipedia.org/wiki/Data_science"
+page <- read_html(url)
+
+# Extract headings
+headings <- page %>%
+  html_elements("h2") %>%
+  html_text2()
+
+print(headings)
+
+# Extract paragraphs
+paragraphs <- page %>%
+  html_elements("p") %>%
+  html_text2()
+
+print(paragraphs)
+
+# Extract links
+links <- page %>%
+  html_elements("a") %>%
+  html_attr("href")
+
+print(links)
+
+# Extract tables
+tables <- page %>%
+  html_elements("table")
+
+if (length(tables) > 0) {
+  result <- html_table(tables[[1]], fill=TRUE)
+  print(result)
+}
+
+# Save extracted data
+write.csv(data.frame(Paragraph=paragraphs),
+          "scraped_data.csv",
+          row.names=FALSE)

@@ -1,0 +1,906 @@
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/01_prime_number_check.R
+================================================================================
+
+# Question 1: Check whether a given integer is prime.
+n <- as.integer(readline("Enter an integer: "))
+
+if (is.na(n)) {
+  stop("Please enter a whole number.")
+} else if (n < 2) {
+  cat(n, "is not prime.\n")
+} else {
+  divisors <- if (n < 4) integer(0) else 2:floor(sqrt(n))
+  is_prime <- length(divisors) == 0 || !any(n %% divisors == 0)
+  if (is_prime) cat(n, "is prime.\n") else cat(n, "is not prime.\n")
+}
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/02_employee_dataframe.R
+================================================================================
+
+# Question 2: Create employee data, inspect it, summarize it, and plot it.
+employee <- data.frame(
+  id = 1:10,
+  name = c("Asha", "Ben", "Charu", "Dev", "Esha", "Farhan", "Gita", "Hari", "Ira", "Jay"),
+  department = c("Sales", "IT", "HR", "IT", "Sales", "HR", "IT", "Sales", "HR", "IT"),
+  experience_years = c(2, 5, 3, 8, 4, 6, 1, 9, 7, 3),
+  salary = c(32000, 52000, 38000, 76000, 45000, 61000, 30000, 82000, 69000, 41000)
+)
+
+str(employee)
+summary(employee)
+plot(employee$experience_years, employee$salary,
+     main = "Employee Salary vs Experience",
+     xlab = "Experience (years)", ylab = "Salary", pch = 19, col = "steelblue")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/03_patient_vectors_matrices.R
+================================================================================
+
+# Question 3: Patient vectors in different ways and two-matrix operations.
+patient_id <- c(101, 102, 103, 104, 105)
+age <- seq(25, 65, by = 10)
+diabetes <- c(FALSE, TRUE, FALSE, FALSE, TRUE)
+patient_group <- rep(c("Control", "Case"), length.out = 5)
+patients <- data.frame(patient_id, age, diabetes, patient_group)
+print(patients)
+
+A <- matrix(c(4, 1, 2, 3), nrow = 2, byrow = TRUE)
+B <- matrix(c(2, 0, 1, 2), nrow = 2, byrow = TRUE)
+cat("A + B:\n"); print(A + B)
+cat("A - B:\n"); print(A - B)
+cat("Element-wise multiplication A * B:\n"); print(A * B)
+cat("Matrix multiplication A %*% B:\n"); print(A %*% B)
+cat("Diagonal of A:\n"); print(diag(A))
+cat("Transpose of A:\n"); print(t(A))
+cat("Inverse of A:\n"); print(solve(A))
+
+A_with_row <- rbind(A, c(5, 6))
+A_with_row_and_column <- cbind(A_with_row, c(7, 8, 9))
+cat("After adding a row and column:\n"); print(A_with_row_and_column)
+cat("Subset: rows 1-2, column 2:\n"); print(A[1:2, 2, drop = FALSE])
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/04_student_dataframe_charts.R
+================================================================================
+
+# Question 4: Student data frame, queries, and three chart types.
+students <- data.frame(
+  roll_no = 1:10,
+  name = c("Aarav", "Bina", "Chirag", "Diya", "Eshan", "Fatima", "Gopal", "Hema", "Ishaan", "Jaya"),
+  branch = c("CSE", "ECE", "CSE", "IT", "ECE", "CSE", "IT", "ECE", "CSE", "IT"),
+  section = rep(c("A", "B"), 5),
+  subjects = c(6, 6, 5, 6, 5, 6, 6, 5, 6, 5),
+  cgpa = c(8.2, 7.1, 9.0, 6.8, 7.8, 8.7, 7.4, 8.0, 9.2, 6.9),
+  backlogs = c(0, 1, 0, 2, 0, 0, 1, 0, 0, 1)
+)
+
+cat("Students with CGPA > 7.5:\n")
+print(students[students$cgpa > 7.5, c("roll_no", "name")])
+cat("Average CGPA by branch:\n")
+print(aggregate(cgpa ~ branch, data = students, FUN = mean))
+cat("Top 7 records by CGPA:\n"); print(head(students[order(-students$cgpa), ], 7))
+cat("Bottom 7 records by CGPA:\n"); print(head(students[order(students$cgpa), ], 7))
+
+branch_counts <- table(students$branch)
+par(mfrow = c(1, 3))
+barplot(branch_counts, main = "Students by Branch", xlab = "Branch", ylab = "Count", col = "skyblue")
+hist(students$cgpa, main = "CGPA Distribution", xlab = "CGPA", col = "wheat", breaks = 5)
+pie(branch_counts, main = "Branch Share", col = c("skyblue", "salmon", "palegreen"))
+par(mfrow = c(1, 1))
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/05_csv_read_write_plots.R
+================================================================================
+
+# Question 5: Write/read a CSV, then make a scatter plot and box plot.
+measurements <- data.frame(
+  id = 1:8,
+  study_hours = c(1, 2, 2, 3, 4, 5, 6, 7),
+  score = c(42, 48, 55, 58, 67, 73, 81, 88),
+  group = c("A", "A", "B", "A", "B", "B", "A", "B")
+)
+
+write.csv(measurements, "study_measurements.csv", row.names = FALSE)
+data_from_csv <- read.csv("study_measurements.csv")
+print(data_from_csv)
+write.csv(data_from_csv, "study_measurements_copy.csv", row.names = FALSE)
+
+par(mfrow = c(1, 2))
+plot(data_from_csv$study_hours, data_from_csv$score,
+     main = "Study Hours vs Score", xlab = "Study hours", ylab = "Score",
+     pch = 19, col = "darkgreen")
+boxplot(score ~ group, data = data_from_csv,
+        main = "Scores by Group", xlab = "Group", ylab = "Score", col = "lightblue")
+par(mfrow = c(1, 1))
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/06_text_file_vector_operations.R
+================================================================================
+
+# Question 6: Text-file input/output and common vector operations.
+lines_to_save <- c("Data Science Lab", "R can read and write text files.", "Vector operations are useful.")
+writeLines(lines_to_save, "lab_notes.txt")
+notes <- readLines("lab_notes.txt", warn = FALSE)
+cat("Text read from file:\n"); cat(notes, sep = "\n")
+writeLines(c(notes, "This is an added line."), "lab_notes_copy.txt")
+
+x <- c(10, 20, 30, 40, 50)
+target <- 30
+cat("Is target present? ", target %in% x, "\n", sep = "")
+cat("First element: ", x[1], "\n", sep = "")
+cat("Elements at positions 2 and 4: "); print(x[c(2, 4)])
+cat("Elements greater than 25: "); print(x[x > 25])
+cat("x + 5: "); print(x + 5)
+cat("x * 2: "); print(x * 2)
+cat("x / 10: "); print(x / 10)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/07_excel_and_matrix_elements.R
+================================================================================
+
+# Question 7: Write/read an Excel workbook and inspect matrix elements.
+# Install once if needed: install.packages(c("readxl", "writexl"))
+if (!requireNamespace("writexl", quietly = TRUE) || !requireNamespace("readxl", quietly = TRUE)) {
+  stop("Install the readxl and writexl packages first.")
+}
+
+marks <- data.frame(name = c("Asha", "Bilal", "Chitra"), score = c(86, 74, 93))
+writexl::write_xlsx(list(Marks = marks, Notes = data.frame(note = "Sample workbook")), "student_marks.xlsx")
+excel_data <- readxl::read_excel("student_marks.xlsx", sheet = "Marks")
+print(excel_data)
+writexl::write_xlsx(list(Marks = as.data.frame(excel_data)), "student_marks_copy.xlsx")
+
+M <- matrix(1:12, nrow = 3, ncol = 4, byrow = TRUE)
+cat("Matrix:\n"); print(M)
+cat("Dimensions: "); print(dim(M))
+cat("Rows: ", nrow(M), "; columns: ", ncol(M), "; elements: ", length(M), "\n", sep = "")
+cat("Element at row 2, column 3: ", M[2, 3], "\n", sep = "")
+cat("Second row: "); print(M[2, ])
+cat("Columns 1 and 4: \n"); print(M[, c(1, 4), drop = FALSE])
+cat("Elements 2, 5, and 8 in column-major order: "); print(M[c(2, 5, 8)])
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/08_xml_read_and_arrays.R
+================================================================================
+
+# Question 8: Read values from XML and create named arrays.
+# Install once if needed: install.packages("xml2")
+if (!requireNamespace("xml2", quietly = TRUE)) stop("Install the xml2 package first.")
+
+xml_text <- '<class><student id="1"><name>Asha</name><grade>A</grade></student><student id="2"><name>Bilal</name><grade>B</grade></student></class>'
+writeLines(xml_text, "class.xml")
+doc <- xml2::read_xml("class.xml")
+student_names <- xml2::xml_text(xml2::xml_find_all(doc, ".//student/name"))
+student_grades <- xml2::xml_text(xml2::xml_find_all(doc, ".//student/grade"))
+print(data.frame(name = student_names, grade = student_grades))
+
+# Column-wise filling is R's default; transpose the input first for row-wise filling.
+column_array <- array(1:12, dim = c(2, 3, 2))
+row_array <- array(as.vector(t(matrix(1:12, nrow = 2, byrow = TRUE))), dim = c(2, 3, 2))
+names_dim <- list(row = c("R1", "R2"), column = c("C1", "C2", "C3"), slice = c("S1", "S2"))
+dimnames(column_array) <- names_dim
+dimnames(row_array) <- names_dim
+cat("Column-wise array:\n"); print(column_array)
+cat("Row-wise array:\n"); print(row_array)
+cat("Array addition:\n"); print(column_array + row_array)
+cat("Array subtraction:\n"); print(column_array - row_array)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/09_calculator_and_dataset_functions.R
+================================================================================
+
+# Question 9: Calculator operations and common dataset functions.
+calculator <- function() {
+  
+  repeat {
+    
+    num1 <- as.numeric(readline("Enter first number: "))
+    num2 <- as.numeric(readline("Enter second number: "))
+    
+    cat("\n1. Addition")
+    cat("\n2. Subtraction")
+    cat("\n3. Multiplication")
+    cat("\n4. Division")
+    cat("\n5. Exit\n")
+    
+    choice <- as.integer(readline("Enter your choice: "))
+    
+    result <- switch(choice,
+                     num1 + num2,
+                     num1 - num2,
+                     num1 * num2,
+                     num1 / num2,
+                     "exit")
+    
+    if (choice == 5) {
+      cat("Calculator exited.\n")
+      break
+    }
+    
+    cat("Result =", result, "\n\n")
+  }
+}
+
+calculator()
+
+data(iris)
+str(iris)
+summary(iris)
+iris_subset <- subset(iris, Species == "setosa", select = c(Sepal.Length, Sepal.Width, Species))
+print(head(iris_subset))
+print(aggregate(Sepal.Length ~ Species, data = iris, FUN = mean))
+plot(iris$Sepal.Length, iris$Petal.Length,
+     main = "Iris Sepal vs Petal Length", xlab = "Sepal length", ylab = "Petal length",
+     col = iris$Species, pch = 19)
+legend("topleft", legend = levels(iris$Species), col = 1:3, pch = 19)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/10_even_odd_and_xml_data.R
+================================================================================
+
+# Question 10: Classify numbers as even/odd and retrieve a value from XML.
+numbers <- c(12, 7, 20, 5, 9, 14, 3, 18)
+even_numbers <- numbers[numbers %% 2 == 0]
+odd_numbers <- numbers[numbers %% 2 != 0]
+cat("Even numbers: "); print(even_numbers)
+cat("Odd numbers: "); print(odd_numbers)
+cat("Mean of even numbers:", mean(even_numbers), "\n")
+cat("Sum of even numbers:", sum(even_numbers), "\n")
+cat("Mean of odd numbers:", mean(odd_numbers), "\n")
+cat("Sum of odd numbers:", sum(odd_numbers), "\n")
+
+# Install once if needed: install.packages("xml2")
+if (!requireNamespace("xml2", quietly = TRUE)) stop("Install the xml2 package first.")
+xml_text <- '<inventory><item code="P01"><name>Notebook</name><price>45</price></item><item code="P02"><name>Pen</name><price>10</price></item></inventory>'
+writeLines(xml_text, "inventory.xml")
+doc <- xml2::read_xml("inventory.xml")
+selected_price <- xml2::xml_text(xml2::xml_find_first(doc, ".//item[@code='P02']/price"))
+cat("Price of item P02:", selected_price, "\n")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/11_factors_and_type_operations.R
+================================================================================
+
+# Question 11: Factor levels/frequencies, type checks/conversion, and IQR.
+grades <- factor(c("A", "B", "A", "C", "B", "A", "D", "B", "C", "A"),
+                 levels = c("A", "B", "C", "D"), ordered = TRUE)
+cat("Levels:\n"); print(levels(grades))
+cat("Number of levels:", nlevels(grades), "\n")
+cat("Factor structure:\n"); str(grades)
+grade_counts <- table(grades)
+cat("Students in each grade:\n"); print(grade_counts)
+cat("Grade with the most students:\n"); print(names(grade_counts)[grade_counts == max(grade_counts)])
+
+score_text <- c("72", "85", "91", "68", "77")
+scores <- as.numeric(score_text)
+cat("Type checks:\n")
+print(is.character(score_text)); print(is.numeric(scores)); print(class(grades))
+cat("Converted scores:\n"); print(scores)
+cat("Score IQR:", IQR(scores), "\n")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/14_xml_data_retrieval.R
+================================================================================
+
+# Question 14: Read an XML file and retrieve one selected record/value.
+# Install once if needed: install.packages("xml2")
+if (!requireNamespace("xml2", quietly = TRUE)) stop("Install the xml2 package first.")
+
+xml_text <- '<library><book id="B101"><title>Data Science Basics</title><author>R. Kumar</author></book><book id="B102"><title>Learning R</title><author>S. Rao</author></book></library>'
+writeLines(xml_text, "library.xml")
+doc <- xml2::read_xml("library.xml")
+book_id <- "B102"
+book <- xml2::xml_find_first(doc, sprintf(".//book[@id='%s']", book_id))
+if (inherits(book, "xml_missing")) stop("Book ID was not found.")
+book_details <- data.frame(
+  id = xml2::xml_attr(book, "id"),
+  title = xml2::xml_text(xml2::xml_find_first(book, "./title")),
+  author = xml2::xml_text(xml2::xml_find_first(book, "./author"))
+)
+print(book_details)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/16_student_scores_dataframe.R
+================================================================================
+
+# Question 16: Create and transform a 15-student score data frame.
+students <- data.frame(
+  id = 1:15,
+  name = c("Asha", "Bilal", "Charu", "Deep", "Esha", "Farid", "Gita", "Hari", "Isha", "Jay", "Kiran", "Lata", "Mohan", "Nina", "Om"),
+  score = c(78, 55, 91, 63, 39, 84, 72, 48, 96, 60, 67, 33, 88, 74, 51)
+)
+str(students)
+summary(students)
+
+cat("Rows with score > 60 (name and score only):\n")
+print(students[students$score > 60, c("name", "score")])
+students$grade <- ifelse(students$score >= 40, "Pass", "Fail")
+students <- students[order(-students$score), ]
+cat("Sorted scores with grade:\n"); print(students)
+
+# rbind needs matching column names and compatible column types.
+new_row <- data.frame(id = 16, name = "Pooja", score = 69, grade = "Pass")
+students <- rbind(students, new_row)
+# cbind needs the same number and order of rows.
+students$section <- rep(c("A", "B", "C"), length.out = nrow(students))
+other_students <- data.frame(id = 101:103, name = c("Q", "R", "S"), score = c(70, 80, 90), grade = c("Pass", "Pass", "Pass"), section = c("A", "B", "C"))
+combined_rows <- rbind(students, other_students)
+extra_column <- data.frame(attendance = rep(95, nrow(students)))
+students_with_attendance <- cbind(students, extra_column)
+cat("After adding a row:\n"); print(tail(students, 2))
+cat("After adding a column:\n"); print(head(students_with_attendance))
+cat("Combined data frames with rbind:\n"); print(tail(combined_rows, 3))
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/17_numeric_vectors_type_coercion.R
+================================================================================
+
+# Question 17: Numeric vectors, coercion, filtering, and sequence helpers.
+x <- seq(2, 20, by = 2)
+cat("x:"); print(x)
+cat("Elements at positions 3 to 6:"); print(x[3:6])
+
+# c(1, "a", TRUE) becomes character because character is the highest type here.
+coerced <- c(1, "a", TRUE)
+cat("c(1, \"a\", TRUE):\n"); print(coerced)
+cat("Type:", typeof(coerced), "\n")
+
+v <- c(5, 12, 8, 21, 3)
+above_7 <- v[v > 7]
+cat("Values greater than 7:"); print(above_7)
+cat("Their mean:", mean(above_7), "\n")
+
+target <- c(rev(seq(2, 10, by = 2)), rep(2, 3))
+cat("Target vector:"); print(target)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/dataset-1/20_array_operations.R
+================================================================================
+
+# Question 20: Create row-wise and column-wise arrays, name dimensions, and operate.
+column_array <- array(1:12, dim = c(2, 3, 2))
+row_array <- array(as.vector(t(matrix(1:12, nrow = 2, byrow = TRUE))), dim = c(2, 3, 2))
+dimension_names <- list(
+  row = c("Row1", "Row2"),
+  column = c("Col1", "Col2", "Col3"),
+  layer = c("Layer1", "Layer2")
+)
+dimnames(column_array) <- dimension_names
+dimnames(row_array) <- dimension_names
+
+cat("Filled column-wise (R default):\n"); print(column_array)
+cat("Filled row-wise:\n"); print(row_array)
+cat("Addition:\n"); print(column_array + row_array)
+cat("Subtraction:\n"); print(column_array - row_array)
+cat("Element-wise multiplication:\n"); print(column_array * row_array)
+cat("Element-wise division:\n"); print(column_array / row_array)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/1.linear_regression.R
+================================================================================
+
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/linear regression/pizza_sales.csv")
+#print 6 rows
+head(data)
+
+model <- lm(pizza_sold ~ number_of_ads,data = data)
+print(model)
+summary(model)
+
+new_data = data.frame(number_of_ads = 25)
+predict(model,newdata = new_data)
+
+plot(data$number_of_ads, data$pizza_sold,pch = 19,col = "blue")
+
+abline(model,lwd = 2, col = 'red')
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/2.multiple_regression.R
+================================================================================
+
+data = read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/multiple regression/house_price.csv")
+head(data)
+
+model <- lm(House_Price ~ Square_Footage+Num_Bedrooms+Num_Bathrooms, data = data)
+model
+summary(model)
+
+new_house <- data.frame(Square_Footage=1500,	Num_Bedrooms=2,	Num_Bathrooms=3)
+predict(model,newdata = new_house)
+
+predicted_prices <- predict(model,newdata = data)
+
+plot(data$House_Price, predicted_prices,
+     main = "Multiple Regression: House prices Acutal vs Predicted",
+      xlab = "Actual House Price",
+      ylab = "Predicted House Price",
+     pch = 19,
+     col = "lightblue"
+)
+
+abline(a =0, b = 1, lwd = 2, col = "red")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/3.1 NB Simple.R
+================================================================================
+
+library(e1071)
+library(caret)
+
+# Read and clean data
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/naive bayes/play_tennis.csv",na.strings = "None")
+
+data <- na.omit(data)
+
+# Remove identifier and convert columns to factors
+data$Day <- NULL
+data[] <- lapply(data, factor)
+
+# Split data
+set.seed(23)
+i <- sample(1:nrow(data), floor(0.7 * nrow(data)))
+train <- data[i, ]
+test <- data[-i, ]
+
+# Train and predict
+model <- naiveBayes(Play ~ ., data = train, laplace = 1)
+predicted <- predict(model, test)
+
+# Evaluate
+cm <- confusionMatrix(predicted, test$Play, positive = "Yes")
+print(cm$table)
+print(cm$overall["Accuracy"])
+print(cm$byClass["Pos Pred Value"])
+
+# Predict a new day
+new_day <- data.frame(
+  Outlook = "Sunny", Temperature = "Cool",
+  Humidity = "Normal", Wind = "Weak"
+)
+
+predict(model, new_day)
+predict(model, new_day, type = "raw")
+
+# Plot
+barplot(cm$table, beside = TRUE,
+        col = c("red", "blue"), legend.text = TRUE,
+        main = "Naive Bayes Classification",
+        xlab = "Actual class", ylab = "Count")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/3.naive_bayes.R
+================================================================================
+
+# imported packages
+library("e1071")
+library("caret")
+
+# data read
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/naive bayes/play_tennis.csv",na.strings = "None")
+data <- na.omit(data)
+
+#factorizing the categorical column into factors
+data$Outlook <- factor(data$Outlook)
+data$Temperature <- factor(data$Temperature)
+data$Humidity <- factor(data$Humidity)
+data$Wind <- factor(data$Wind)
+data$Play <- factor(data$Play)
+
+set.seed(23)
+num_row <- nrow(data)
+
+training_row_index <- sample(1:num_row,size = floor(0.7 * num_row))
+#splitting the data
+training_data <- data[training_row_index,]
+testing_data <- data[-training_row_index,]
+#fitting the model
+model <- naiveBayes(Play ~ Outlook+Temperature+Humidity+Wind, data = training_data, laplace = 1)
+#predicting values
+predicted <- predict(model, newdata = testing_data)
+#printing acutal and predicted values(6)
+head(data.frame(
+  Actual = testing_data$Play,
+  Predicted_value = predicted
+))
+
+new_day <- data.frame(
+  Outlook = "Sunny",
+  Temperature = "Cool",
+  Humidity = "Normal",
+  Wind = "Weak"
+)
+
+predict(model, newdata = new_day)
+predict(model, newdata = new_day, type = "raw")
+
+cm <- confusionMatrix(
+  data = predicted,
+  reference = testing_data$Play,
+  positive = "Yes"
+)
+
+print(cm$table)
+
+accuracy <- cm$overall["Accuracy"]
+precision <- cm$byClass["Pos Pred Value"]
+
+print(accuracy)
+print(precision)
+
+barplot(cm$table,
+        beside = TRUE,
+        col = c("red", "blue"),
+        legend.text = TRUE,
+        main = "Naive Bayes Classification",
+        xlab = "Actual class",
+        ylab = "Count"
+)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/4.1 KNN Simple.R
+================================================================================
+
+library(class)
+library(caret)
+
+data <- iris
+
+# Split the data
+set.seed(23)
+i <- sample(1:150, 105)
+train <- data[i, ]
+test <- data[-i, ]
+
+# KNN classification
+predicted <- knn(train[, 1:4], test[, 1:4],
+                 train$Species, k = 5)
+
+# Evaluate predictions
+cm <- confusionMatrix(predicted, test$Species)
+print(cm$table)
+print(cm$overall["Accuracy"])
+print(cm$byClass[, "Pos Pred Value"])
+
+# Predict a new flower
+flower <- data.frame(
+  Sepal.Length = 5.1, Sepal.Width = 3.5,
+  Petal.Length = 1.4, Petal.Width = 0.2
+)
+
+knn(train[, 1:4], flower, train$Species, k = 5)
+
+# Plot
+plot(test$Petal.Length, test$Petal.Width,
+     col = as.integer(predicted), pch = 19,
+     xlab = "Petal length", ylab = "Petal width",
+     main = "KNN Classification")
+
+legend("topleft", legend = levels(data$Species),
+       col = 1:3, pch = 19)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/4.KNN.R
+================================================================================
+
+# 1. Load packages and dataset
+library(class)
+library(caret)
+
+data <- iris
+head(data)
+
+# 2. Split into 70% training and #30% testing
+set.seed(23)
+
+train_index <- sample(
+  1:nrow(data),
+  size = floor(0.70 * nrow(data))
+)
+
+train_data <- data[train_index, ]
+test_data <- data[-train_index, ]
+
+# 3. Predict test classes using the four measurement columns
+predicted <- knn(
+  train = train_data[, 1:4],
+  test = test_data[, 1:4],
+  cl = train_data$Species,
+  k = 5
+)
+
+# 4. Confusion matrix
+cm <- confusionMatrix(
+  data = predicted,
+  reference = test_data$Species
+)
+
+print(cm$table)
+
+# 5. Accuracy and precision for each species
+print(cm$overall["Accuracy"])
+print(cm$byClass[, "Pos Pred Value"])
+
+# 6. Create a new flower
+new_flower <- data.frame(
+  Sepal.Length = 5.1,
+  Sepal.Width = 3.5,
+  Petal.Length = 1.4,
+  Petal.Width = 0.2
+)
+
+# 7. Predict the new flower's species
+knn(
+  train = train_data[, 1:4],
+  test = new_flower,
+  cl = train_data$Species,
+  k = 5
+)
+
+# 8. Plot test flowers using predicted species colours
+plot(test_data$Petal.Length, test_data$Petal.Width,
+     col = as.integer(predicted),
+     pch = 19,
+     xlab = "Petal length",
+     ylab = "Petal width",
+     main = "KNN Classification")
+
+legend("topleft",
+       legend = levels(data$Species),
+       col = 1:3,
+       pch = 19)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/5.1 Kmeans Simple.R
+================================================================================
+
+# Read data and select two numerical columns
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/kmeans/Mall_Customers.csv")
+x <- data[, c("AnnualIncome", "SpendingScore")]
+
+# Create five clusters
+set.seed(132)
+km <- kmeans(x, centers = 5, nstart = 25)
+
+print(km$centers)
+print(km$size)
+
+# Plot customers and centroids
+plot(x, col = km$cluster, pch = 19)
+points(km$centers, pch = 8, cex = 2)
+
+# New customer: income = 70, spending score = 80
+distance <- sqrt((km$centers[, 1] - 70)^2 +
+                   (km$centers[, 2] - 80)^2)
+
+# Display distance to each cluster centre
+print(data.frame(
+  Cluster = 1:5,
+  Distance = round(distance, 2)
+), row.names = FALSE)
+
+# Choose the nearest cluster
+cat("Predicted cluster:", which.min(distance), "\n")
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/5.KMeans.R
+================================================================================
+
+# 1. Read the dataset
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/kmeans/Mall_Customers.csv")
+
+# 2. Select the numerical features
+x <- data[, c("AnnualIncome", "SpendingScore")]
+
+# 3. Perform K-means clustering
+set.seed(132)
+
+km <- kmeans(x, centers = 5, nstart = 25)
+
+# 4. Display results
+head(km$cluster, 10)
+round(km$centers, 2)
+km$size
+
+# 5. Plot the clusters
+plot(x$AnnualIncome, x$SpendingScore,
+     col = km$cluster,
+     pch = 19,
+     xlab = "Annual income (dataset units)",
+     ylab = "Spending score",
+     main = "K-Means Customer Clustering")
+
+# 6. Add centroids and labels
+points(km$centers,
+       pch = 8,
+       cex = 2,
+       lwd = 2)
+
+text(km$centers,
+     labels = paste("Cluster", 1:5),
+     pos = 3,
+     cex = 0.85)
+
+# 7. Create a new customer
+new_customer <- c(
+  AnnualIncome = 70,
+  SpendingScore = 80
+)
+
+# 8. Calculate distance to each centroid
+distances <- apply(km$centers, 1, function(center) {
+  sqrt(sum((new_customer - center)^2))
+})
+
+round(distances, 2)
+
+# 9. Select the nearest cluster
+predicted_cluster <- which.min(distances)
+print(predicted_cluster)
+
+# 10. Add the new customer to the graph
+points(new_customer[1], new_customer[2],
+       pch = 17,
+       cex = 2,
+       col = predicted_cluster)
+
+text(new_customer[1], new_customer[2],
+     labels = "New customer",
+     pos = 1,
+     cex = 0.85)
+
+
+================================================================================
+FILE: /Users/timothysaxena/Downloads/MGIT/Sem-V/ds_lab/datasets-not-csv/6.Logistic.R
+================================================================================
+
+# Read data
+data <- read.csv("/Users/timothysaxena/Downloads/MGIT/Sem-V/8. DSL/Mid2/logistic regression/admissions.csv")
+data$rank <- factor(data$rank)
+
+# Fit logistic regression
+model <- glm(admit ~ gre + gpa + rank,
+             data = data, family = binomial)
+
+summary(model)
+
+# Predict probabilities and classes
+prob <- predict(model, type = "response")
+predicted <- ifelse(prob >= 0.5, 1, 0)
+
+# Confusion matrix and training accuracy
+print(table(Actual = data$admit, Predicted = predicted))
+print(mean(predicted == data$admit))
+
+# Predict admission for a new student
+new_student <- data.frame(
+  gre = 700, gpa = 3.8, rank = factor(1)
+)
+
+p <- predict(model, newdata = new_student, type = "response")
+print(p)
+print(ifelse(p >= 0.5, 1, 0))
+
+# Plot admission probabilities
+plot(prob, pch = 19, col = "blue",
+     xlab = "Student", ylab = "Admission probability",
+     ylim = c(0, 1))
+
+abline(h = 0.5, col = "red")
+
+================================================================================
+# Correlation, Covariance and ANOVA
+================================================================================
+
+# Load dataset
+data(iris)
+
+# Select numerical variables
+numeric_data <- iris[, 1:4]
+
+# 1. Correlation matrix
+cor_matrix <- cor(numeric_data)
+print("Correlation Matrix")
+print(cor_matrix)
+
+# 2. Covariance matrix
+cov_matrix <- cov(numeric_data)
+print("Covariance Matrix")
+print(cov_matrix)
+
+# 3. Correlation plot
+library(corrplot)
+
+corrplot(cor_matrix,
+         method="color",
+         type="upper",
+         addCoef.col="black",
+         main="Iris Correlation Plot")
+
+# 4. ANOVA
+model <- aov(Sepal.Length ~ Species,
+             data=iris)
+
+print("ANOVA Results")
+summary(model)
+
+# 5. Tukey test
+TukeyHSD(model)
+
+# 6. Box plot
+boxplot(Sepal.Length ~ Species,
+        data=iris,
+        main="Sepal Length by Species",
+        col=c("red", "green", "blue"))
+
+
+
+================================================================================
+# Web Scraping in R
+================================================================================
+
+# Install and load package
+install.packages("rvest")
+library(rvest)
+
+# Read webpage
+url <- "https://en.wikipedia.org/wiki/Data_science"
+page <- read_html(url)
+
+# Extract headings
+headings <- page %>%
+  html_elements("h2") %>%
+  html_text2()
+
+print(headings)
+
+# Extract paragraphs
+paragraphs <- page %>%
+  html_elements("p") %>%
+  html_text2()
+
+print(paragraphs)
+
+# Extract links
+links <- page %>%
+  html_elements("a") %>%
+  html_attr("href")
+
+print(links)
+
+# Extract tables
+tables <- page %>%
+  html_elements("table")
+
+if (length(tables) > 0) {
+  result <- html_table(tables[[1]], fill=TRUE)
+  print(result)
+}
+
+# Save extracted data
+write.csv(data.frame(Paragraph=paragraphs),
+          "scraped_data.csv",
+          row.names=FALSE)
